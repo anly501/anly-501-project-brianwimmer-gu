@@ -11,7 +11,7 @@
 
 
 
-<title>introduction</title>
+<title>data gathering</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -365,29 +365,36 @@ pre code {
 </div>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>COVID-19 made an unprecedented impact on the lives of every single human on the planet. Two and a half years later and, for the majority of the world, we have gotten the chance to fully live our lives again. Although we may tire from hearing about it everyday still, it is important to consider the lasting effects the pandemic has had.
-
-  Perhaps the most impacted industry of all was the airline industry. As flights around the world were canceled and airports hit record-low traffic numbers, market outlook looked dire. International governments rushed to bail out airlines on the brink of collapse, while looking forward to a future where air travel would (hopefully) come back. Luckily, air travel has made a roaring comeback in some markets and for some market segments. Particularly travel to popular destinations with relaxed restrictions appealed to the trip-hungry tourist. On the other hand, business travel, which historically made up the majority of the legacy airlines revenue, still hasn’t made a full comeback. Some investment firms are unsure if it ever will, and airlines are having to get creative so as not to continue to lose revenue.
-  
-  For this project, I will explore the airline industry and traffic numbers since the COVID-19 pandemic. I will explore market values, revenue and profitability, airport traffic numbers, and be able to understand the impact the past few years have had. I will also be conducting analysis regarding consumer sentiment on both leisure and business travel. 
-  
-  There have been countless news articles and market research regarding the airline industry and the bounce back to travel. However, I want my project to be different as it will be looking through my lens as a data science student. I hope to examine different aspects of the airline industry in a more holistic way. My main goal is to provide the reader with more context regarding COVID-19’s effect on air travel and how their own personal decisions can have lasting impacts on both the economy and the places in which they travel.
-  
-<h2>Questions</h2>
-  <ol>
-    <li>Overall, has air travel recovered to pre-pandemic levels?</li>
-    <li>What destinations saw the biggest impact on air traffic? What were the restrictions in place for those destinations?</li>
-    <li>How have airlines (both domestic and international) fared in the stock market?</li>
-    <li>Is business-related travel making a comeback?</li>
-    <li>What travel-class (Economy, Premium, Business, First. etc.) has endured the biggest impact - flight load factor, revenue, etc.?</li>
-    <li>What destinations have emerged from the COVID-19 pandemic (increase in traffic)?</li>
-    <li>Is the sentiment regarding air travel relatively positive or negative? Is there a difference in the sentiment regarding business-related vs. leisure-related travel?</li>
-    <li>What impact has increased cleaning measures had on airlines - expenses, turn-around-time, etc.?</li>
-    <li>With reference to current market trends, is there an expected date or season when travel is expected to make a full comeback?</li>
-    <li>Did government bailouts have an effect on market valuation?</li>
-  </ol>
+<div id="data_gathering" class="section level1">
+<h1>Data Gathering</h1>
+<p> I gathered data from both source-websites and APIs.
+    <ol>
+        <li> American Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
+            Gathered from <a href="https://www.marketwatch.com/investing/stock/aal?mod=search_symbol">MarketWatch</a>
+            <img src="AAL_image.png">
+        </li>
+        <li> Delta Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
+            Gathered from <a href="https://www.marketwatch.com/investing/stock/dal?mod=search_symbol">MarketWatch</a>
+            <img src="DAL_image.png">
+        </li>
+        <li> United Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
+            Gathered from <a href="https://www.marketwatch.com/investing/stock/ual?mod=search_symbol">MarketWatch</a>
+            <img src="UAL_image.png">
+        </li>
+        <li> Number of Passenger Flights (Domestic) - March 2018 to March 2022<br>
+            Gathered from <a href="https://www.transtats.bts.gov/TRAFFIC/">US Bureau of Transportation Statistics</a>
+            <img src="March18_March22_NumFlights.png">
+        </li>
+        <li> Twitter-API using R
+            <img src="image.png">
+        </li>
+        <li> Twitter-API using Python
+            <img src="image.png">
+        </li>
+        <li> Twitter-API using R
+            <img src="image.png">
+        </li>
+    </ol>
   </p>
 </div>
 
