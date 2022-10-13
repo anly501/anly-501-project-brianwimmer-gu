@@ -40,7 +40,7 @@ print()
 def search_twitter(query, tweet_fields, bearer_token, max_results, start_time, end_time):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
 
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&max_resuls={}&start_time={}&end_time={}".format(query, tweet_fields, max_results, start_time, end_time)
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&max_results={}&start_time={}&end_time={}".format(query, tweet_fields, max_results, start_time, end_time)
     
     print("--------------",url,"--------------")
     response = requests.request("GET", url, headers=headers)
@@ -62,8 +62,8 @@ tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 max_results = 100
 
 # timing -> day of first bailout march 27
-start_time = "2020-03-27T16:22:02+00:00"
-end_time = "2020-03-28T16:22:02+00:00"
+start_time = "2020-03-27T00:00:00Z"
+end_time = "2020-03-28T00:00:00Z"
 
 
 # twitter api call ***** and combine
