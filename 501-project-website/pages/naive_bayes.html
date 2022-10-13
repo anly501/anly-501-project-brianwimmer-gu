@@ -369,33 +369,38 @@ pre code {
 <h1>Naive Bayes</h1>
 <div>
     <h2>Naive Bayes in R:</h2>
-    <ol>
-        <li> American Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/aal?mod=search_symbol">MarketWatch</a>
-            <img src="AAL_image.png">
-        </li>
-        <li> Delta Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/dal?mod=search_symbol">MarketWatch</a>
-            <img src="DAL_image.png">
-        </li>
-        <li> United Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/ual?mod=search_symbol">MarketWatch</a>
-            <img src="UAL_image.png">
-        </li>
-        <li> Number of Passenger Flights (Domestic) - March 2018 to March 2022<br>
-            Gathered from <a href="https://www.transtats.bts.gov/TRAFFIC/">US Bureau of Transportation Statistics</a>
-            <img src="March18_March22_NumFlights.png">
-        </li>
-        <li> Twitter-API using R
-            <img src="image.png">
-        </li>
-        <li> Twitter-API using Python
-            <img src="image.png">
-        </li>
-        <li> Twitter-API using R
-            <img src="image.png">
-        </li>
-    </ol>
+    <p>For conducting Naive Bayes in R, I wanted to look at TSA checkpoint data between 2019 and 2022. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://www.tsa.gov/coronavirus/passenger-throughput">TSA</a>. The purpose of this was to see if airports had recovered in terms of passengers passing through TSA since the COVID-19 pandemic. More specifically, we will look at comparing 2019 TSA checkpoint numbers vs. 2022 TSA checkpoint numbers. I created a target variable, called "target", with "recovered" being denoted as 1, and "not recovered" being denoted as 0. "Recovered" means that 2022 checkpoint passenger numbers have surpassed 2019 numbers, while "not recovered" means passenger checkpoint numbers are still below pre-pandemic levels. I then split the data into train and test sets using an 80/20 split. Pictured below are statistical summaries of the TSA checkpoint passengers numbers for both the train and testing data. Training data:
+        <img src="../images/R_summary_train.png">
+    Testing data:
+        <img src="../images/R_summary_test.png">
+    From there, I scaled the features, each of the four years included in the data (2019, 2020, 2021, and 2022). I then fit the Naive Bayes model to the training data. Pictured below is a summary of the model:
+        <img src="../images/R_NB_result.png">
+    Finally, I predicted using the test data. Pictured below is the confusion matrix - my model had an accuracy of 95.8% when predicting if TSA passenger numbers have or haven't recovered from pre-pandemic levels.
+        <img src="../images/R_NB_conf_mat.png">
+    I also wanted to visualize the correlation between features using a correlation plot. We can note that the year 2020 saw the biggest impact to airline passenger numbers, which is clearly seen in the negative correlation with the other years. 
+        <img src="../images/R_correlation.png">
+    Next, I examined boxplots of both 2019 and 2022 with the target to confirm previous insight that passenger numbers have overall not recovered. For 2019, we can see that among the days that had not seen recovery (red), the passenger numbers were higher than the the days that had recovered (green).
+        <img src="../images/R_box_2019.png">
+    In comparison, in 2022, days that had recovered in passenger numbers (green) saw an overall larger passenger number that the days that had not recovered (red).
+        <img src="../images/R_box_2022.png">
+    In conclusion, we can confirm that TSA passenger checkpoint numbers in 2022 have not seen a full recovery since the pre-pandemic world of 2019. The Naive Bayes model in R predicted the days that saw or did not see recovery with a 95.8% accuracy.
+    
+    <h2>Naive Bayes in Python:</h2>
+    <p>For conducting Naive Bayes in R, I wanted to look at TSA checkpoint data between 2019 and 2022. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://www.tsa.gov/coronavirus/passenger-throughput">TSA</a>. The purpose of this was to see if airports had recovered in terms of passengers passing through TSA since the COVID-19 pandemic. More specifically, we will look at comparing 2019 TSA checkpoint numbers vs. 2022 TSA checkpoint numbers. I created a target variable, called "target", with "recovered" being denoted as 1, and "not recovered" being denoted as 0. "Recovered" means that 2022 checkpoint passenger numbers have surpassed 2019 numbers, while "not recovered" means passenger checkpoint numbers are still below pre-pandemic levels. I then split the data into train and test sets using an 80/20 split. Pictured below are statistical summaries of the TSA checkpoint passengers numbers for both the train and testing data. Training data:
+        <img src="../images/R_summary_train.png">
+    Testing data:
+        <img src="../images/R_summary_test.png">
+    From there, I scaled the features, each of the four years included in the data (2019, 2020, 2021, and 2022). I then fit the Naive Bayes model to the training data. Pictured below is a summary of the model:
+        <img src="../images/R_NB_result.png">
+    Finally, I predicted using the test data. Pictured below is the confusion matrix - my model had an accuracy of 95.8% when predicting if TSA passenger numbers have or haven't recovered from pre-pandemic levels.
+        <img src="../images/R_NB_conf_mat.png">
+    I also wanted to visualize the correlation between features using a correlation plot. We can note that the year 2020 saw the biggest impact to airline passenger numbers, which is clearly seen in the negative correlation with the other years. 
+        <img src="../images/R_correlation.png">
+    Next, I examined boxplots of both 2019 and 2022 with the target to confirm previous insight that passenger numbers have overall not recovered. For 2019, we can see that among the days that had not seen recovery (red), the passenger numbers were higher than the the days that had recovered (green).
+        <img src="../images/R_box_2019.png">
+    In comparison, in 2022, days that had recovered in passenger numbers (green) saw an overall larger passenger number that the days that had not recovered (red).
+        <img src="../images/R_box_2022.png">
+    In conclusion, we can confirm that TSA passenger checkpoint numbers in 2022 have not seen a full recovery since the pre-pandemic world of 2019. The Naive Bayes model in R predicted the days that saw or did not see recovery with a 95.8% accuracy.
   </p>
 </div>
 
