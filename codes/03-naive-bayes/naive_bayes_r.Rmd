@@ -1,0 +1,126 @@
+---
+title: "naive_bayes_r"
+author: "Brian Wimmer"
+date: "2022-10-13"
+output: html_document
+---
+
+```{r}
+# read in record data
+data <- read.csv('/Users/brianwimmer/anly-501-project-brianwimmer-gu/data/TSA_Checkpoint_Numbers.csv')
+
+# remove date with missing value
+data <- data[-(286:364),]
+
+# create targets: 
+# 1: recovered since pre-pandemic year (2019)
+# 0: not recovered since pre-pandemic year (2019)
+data$targets <- ifelse(data$X2022 > data$X2019, 1, 0)
+
+# make feature columns numeric
+data$X2022 <- as.numeric(gsub(",","",data$X2022))
+data$X2021 <- as.numeric(gsub(",","",data$X2021))
+data$X2020 <- as.numeric(gsub(",","",data$X2020))
+data$X2019 <- as.numeric(gsub(",","",data$X2019))
+```
+
+```{r}
+# Installing Packages
+# install.packages("e1071")
+# install.packages("caTools")
+# install.packages("caret")
+# install.packages("corrplot")
+```
+
+
+```{r}
+# Loading package
+library(e1071)
+library(caTools)
+library(caret)
+library(corrplot)
+```
+
+
+```{r}
+# split into train and test data
+split <- sample.split(data, SplitRatio = 0.8)
+train <- subset(data, split == "TRUE")
+test <- subset(data, split == "FALSE")
+```
+
+
+```{r}
+# Scale features (different years)
+train_scale <- scale(train[, 2:5])
+test_scale <- scale(test[, 2:5])
+```
+
+
+```{r}
+# fit the naive bayes model to the training data
+set.seed(1999)  # Setting Seed
+classifier_cl <- naiveBayes(targets ~ ., data = train)
+classifier_cl
+```
+
+
+```{r}
+# Predict using the test data
+y_pred <- predict(classifier_cl, newdata = test)
+```
+
+
+```{r}
+# confusion matrix
+conf <- table(test$targets, y_pred)
+conf
+```
+
+```{r}
+#summary of all data
+print(summary(data))
+```
+
+
+
+```{r}
+# summary of train data
+print(summary(train))
+```
+
+
+```{r}
+# summary of test data
+print(summary(test))
+```
+
+
+
+
+```{r}
+# visualization 1 - correlation plot
+train %>%
+  filter(targets == 0) %>%
+  select_if(is.numeric) %>%
+  cor() %>%
+  corrplot::corrplot(title ="Correlation Plot of Non-Recovered")
+```
+
+```{r}
+# visualization 2 - boxplots of 2019 and 2022
+data %>%
+  ggplot(aes(x=targets, y=X2019, group=targets, fill=factor(targets))) + 
+  geom_boxplot()+scale_fill_manual(values=c("red","green")) +
+  ggtitle("Boxplot of 2019 and targets")
+
+data %>%
+  ggplot(aes(x=targets, y=X2022, group=targets, fill=factor(targets))) + 
+  geom_boxplot()+scale_fill_manual(values=c("red","green")) +
+  ggtitle("Boxplot of 2022 and targets")
+```
+
+
+
+
+
