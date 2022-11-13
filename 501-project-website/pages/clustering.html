@@ -11,7 +11,7 @@
 
 
 
-<title>data gathering</title>
+<title>clustering</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -365,38 +365,66 @@ pre code {
 </div>
 
 
-<div id="data_gathering" class="section level1">
-<h1>Data Gathering</h1>
-<p> I gathered data from both source-websites and APIs.
-    <ol>
-        <li> This is not complete:
-        </li>
-        <li> American Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/aal?mod=search_symbol">MarketWatch</a>
-            <img src="../images/AAL_image.png">
-        </li>
-        <li> Delta Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/dal?mod=search_symbol">MarketWatch</a>
-            <img src="../images/DAL_image.png">
-        </li>
-        <li> United Airlines Stock Data - March 11, 2020 to March 11, 2021<br>
-            Gathered from <a href="https://www.marketwatch.com/investing/stock/ual?mod=search_symbol">MarketWatch</a>
-            <img src="../images/UAL_image.png">
-        </li>
-        <li> Number of Passenger Flights (Domestic) - March 2018 to March 2022<br>
-            Gathered from <a href="https://www.transtats.bts.gov/TRAFFIC/">US Bureau of Transportation Statistics</a>
-            <img src="../images/March18_March22_NumFlights.png">
-        </li>
-        <li> Twitter-API using R
-            <img src="image.png">
-        </li>
-        <li> Twitter-API using Python
-            <img src="image.png">
-        </li>
-        <li> Twitter-API using R
-            <img src="image.png">
-        </li>
-    </ol>
+<div id="clustering" class="section level1">
+<h1>Clustering</h1>
+<div>
+    <h2>Methods:</h2>
+    <p>For conducting Decision Trees in Python, I wanted to look at flight cancellation data. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ&QO_fu146_anzr=b0-gvzr">BTS</a>. The purpose of this was to see if a decision tree model could predict flight cancellations during the first month that COVID-19 was declared a pandemic, which was March 2020. More specifically, we are going to explore flight cancellations departing from Washington Dulles Int'l. Airport (IAD), as well as only for the legacy carriers (United, Delta, and American). I chose to look specifically at this airport as it is closeby, and is one of the United States major airports. I also had to narrow down the data for loading purposes.<br>
+
+    <p>First, the data set was split into X and Y. X denotes the entire dataset, minus the target variable. Y denotes only the target variable. For this decision tree, the target variable is identified as "CANCELLED" and is denoted with 0 being the flight was not cancelled, and 1 being the flight was cancelled. From there, we partition the data into testing and training sets for both X and Y. We then use a decision tree classifier to fit the model to the training data. From there, we make predictions based upon both the X training and test sets for the y-predictors. <br>
+
+    <p>After fitting the model, I made confusion matrices and ran random classifier models to record accuracy, recall, and precision values. I also built the decision tree itself. Both of these will be explored below. Following that, I explored the hyper-parameters to tune the model - which leads to a more accurate model and baseline. <br>
+    
+    <h2>Class Distribution:</h2>
+    <p>For creating the class labels, I first had to make dummy variables for the carriers and destination ariport code. I then looked at the load balance and number of samples for cancelled and non-cancelled flights. I then split the data based on labeling: X denotes the entire dataset, minus the target variable, while Y denotes only the target variable. <br>
+        <img src="../images/DT_labels.png"><br>
+
+    <h2>Baseline Model for Comparison:</h2>
+    <p> <br>
+        Random Classifier on Train Data (Base Model):<br>
+        <img src="../images/DT_random_classifier_train_base.png"><br>
+        Random Classifier on Test Data (Base Model):<br>
+        <img src="../images/DT_random_classifier_test_base.png"><br>
+        Random Classifier on Train Data (Tuned Model):<br>
+        <img src="../images/DT_random_classifier_train_hyper.png"><br>
+        Random Classifier on Test Data (Tuned Model):<br>
+        <img src="../images/DT_random_classifier_test_hyper.png"><br>
+
+    <h2>Feature Selection:</h2>
+    <p> For feature selection, I removed unimportant variables when created the dataset via the BTS website. Information such as the flight date, destination world area code, taxi time, etc. were irrelevant in buiding the decision tree. In a future model, I would look to explore different and various features. Had I tried to include everything the BTS website provides, the dataset would have too much information and not load, as well as resulting in a near impossible tree being built. In the Final Results section, we will see that this tree is already very hard to read.<br>
+
+    <h2>Model Tuning:</h2>
+    <p> After looping through the possible hyper-parameter values, I decided to tune the model for max_depth = num_layer. <br>
+        Hyper-Parameter Coding:<br>
+        <img src="../images/DT_hyper_loop.png"><br>
+        Hyper-Parameter and Accuracy:<br>
+        <img src="../images/DT_hyper_accuracy.png"><br>
+        Hyper-Parameter and Recall = 0:<br>
+        <img src="../images/DT_hyper_recall0.png"><br>
+        Hyper-Parameter and Recall = 1:<br>
+        <img src="../images/DT_hyper_recall1.png"><br>
+
+    <h2>Final Results:</h2>
+    <p>  <br>
+        Correlation Matrix of variables: We have a rather large correlation matrix, given that we have many variables after converting some to dummy values. The majority of the correlation matrix shown are the destinations. However we can see that the most highly correlated features are the elapsed flight time with distance and distance group. This is as expected, as longer flights often cover longer distances.<br>
+        <img src="../images/DT_corr_matrix.png"><br>
+        Confusion Matrix on Train Data (Base Model): The train data accurately predicted cancellations with around 84% accuracy in the base model. <br>
+        <img src="../images/DT_conf_matrix_train_base.png"><br>
+        Confusion Matrix on Test Data (Base Model): The test data accurately predicted cancellations with around 72% accuracy in the base model. We want to tune the model to increase this accuracy. <br>
+        <img src="../images/DT_conf_matrix_test_base.png"><br>
+        Confusion Matrix on Train Data (Tuned Model): The train data accurately predicted cancellations with around 83% accuracy in the hyper-parameter tuned model.<br>
+        <img src="../images/DT_conf_matrix_train_hyper.png"><br>
+        Confusion Matrix on Test Data (Tuned Model): The test data accurately predicted cancellations with around 73.5% accuracy in the hyper-parameter tuned model.<br>
+        <img src="../images/DT_conf_matrix_test_hyper.png"><br>
+        Decision Tree (Base Model): As we can see, the decision tree for the base model is massive, given the large number of features.<br>
+        <img src="../images/DT_tree_base.png"><br>
+        Decision Tree (Tuned Model): As we can see, the decision tree for the tuned model is massive, given the large number of features.<br>
+        <img src="../images/DT_tree_hyper.png"><br>
+
+    <h2>Conclusion:</h2>
+    <p> We can learn many things through the decision tree model that I created. Overall, it predicted flight cancellations given the set of features with around 73.5% accuracy in the hyper-paramter tuned model. Around 3 in 4 flights are being accurately predicted on whether or not the flight was delayed. We can also note that the features seem to not have as much correlation as originally expected via the correlation matrix. <br>
+    <p> In the future, there are a multitude of things I would want to explore differently in a decision tree model for flight cancellations. To begin, I would like to have the capacity to explore a larger amount of data (ie. more rows). The dataset took a while for me to download, so mitigating this could lead to a better model in the future. I would also like to explore different features, and see if more highly correlated features can lead to a more accurate model. I would also like to work on tuning the model a bit better. After hyper-parameter searching and tuning, my model barely improved. I think what could've went wrong was not selecting the proper hyper-parameter. This model served as a good starting point for decision tree modeling of flights, but I want to improve it a lot more before the final project deadline. <br>
+
   </p>
 </div>
 
