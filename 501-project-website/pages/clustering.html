@@ -425,30 +425,68 @@ pre code {
 
     <h2>Methods - Hyper-Parameter Tuning - DBSCAN</h2>
     <p> <br>
-        Data Selection: <br>
-        <img src="../images/DT_random_classifier_train_base.png"><br>
+        To begin DBSCAN clustering, I first ran a K-Nearest Neighbors model to examine the top 5 nearest neighbors for each data point. I then sorted those distances a plotted them in order to find the optimal KNN distance. This optimal distance of 1.75, found where the data began to break, was then used as the "eps" paramter value. <br>
+        <img src="../images/c_db_knn_code.png"><br>
+        <img src="../images/c_db_knn_plot.png"><br>
+
+        Next, I decided on a minPts value of 20 for the min_sample parameter. I chose this based off of the number of flights for each airline. I also tested much larger minPts values, but the results only gave 2 cluster, or even gave 1 cluster of "-1". That value indicates that the data wasn't grouped into any cluster. I figured using and testing smaller minPts values would lead to a better model, which I proved to be a correct assumption.<br>
+        <img src="../images/c_db_20pts_code.png"><br>
+
+        Also pictured below is a count of the number of points in each cluster. As we can see, there are 4 clusters, which an additional -1 cluster (for the non-clustered points). Additionally, the "0" cluster contained a huge number of data points - more points in a single cluster than any of the airlines could possibly have. The other clusters were disproportionally small. This may indicate that the model is not perfoming that well<br>
+        <img src="../images/c_db_20pts_count.png"><br>
+
+        After fitting the model, I plotted the clusters. Again, we can see the "0" cluster in orange takes up a huge space in the data.
+        <img src="../images/c_db_20pts_plot.png"><br>
+
+        I then attempted to lower the minPts value to 15. This affectively gave one fewer cluster than the previous model.
+        <img src="../images/c_db_15pts_code.png"><br>
+
+        In contrast to a minPts value of 20, a minPts value of 15 only gave 3 clusters (and the -1 "non-cluster"). However, the count of the points in each cluster is still very disproportionate compared to the real data. <br>
+        <img src="../images/c_db_15pts_count.png"><br>
+
+        Again, I plotted the clusters to find not much had changed.
+        <img src="../images/c_db_15pts_plot.png"><br>
 
     <h2>Methods - Hyper-Parameter Tuning - Hierarchial Clustering </h2>
     <p> <br>
-        Data Selection: <br>
-        <img src="../images/DT_random_classifier_train_base.png"><br>
+        To begin Hierarchial Clustering, I generated the linkage values between each of the points. <br>
+        <img src="../images/c_hc_dendrogram_code.png"><br>
+
+        I then visualized this linkage using a dendrogram in order to determine the value of k to use when fitting the model later. According to the dendrogram below, the optimal value of k is 3. <br>
+        <img src="../images/c_hc_dendrogram.png"><br>
+
+        After determining a value of k=3, I fit the model using Agglomerative Clustering. For the linkage method, I indicated "ward". For the affinity metric, I indicated "euclidean". <br>
+        <img src="../images/c_hc_model.png"><br>
+
+        Similarly to DBSCAN, I wanted to get a count of the number of points in each cluster. However, the count of points using this method was much similar to the real counts of points for each of the airlines, which may be a good sign that this model will perform better. We still only have 3 clusters, though, even though the data contains information for 4 airlines.  <br>
+        <img src="../images/c_hc_counter.png"><br>
+
+        Finally, I plotted the clusters determined from using hierarchial clustering. Upon first look, this model seems to perform decently well. We will compare this to the actual data later. <br>
+        <img src="../images/c_hc_plot.png"><br>
 
     <h2>Methods - Final Results:</h2>
     <p> <br>
-        K-Means: <br>
-        <img src="../images/DT_random_classifier_train_base.png"><br>
+        For the final results section, we can refer back to each Hyper-Parameter Tuning sub-section for each model. Each of my final results can be found there. Additionally, I will be performing more tuning and modeling prior to the culmination of this project. Therefore, this section is still a work in progress<br>
 
-        DBSCAN: <br>
-        <img src="../images/DT_random_classifier_train_base.png"><br>
+        K-Means: We can determine that the model for k=3 performed best. Not only was this value of k determined using elbow methods, but was also relevant using the silhouette score. The difference between the scores for k=2 and k=3 were extremely minimal, thus k=2 may not in fact perform better than k=3. <br>
 
-        Hierarchial Clustering: <br>
-        <img src="../images/DT_random_classifier_train_base.png"><br>
+        DBSCAN: We can determine that the model with eps=1.75 and min_samples=15 performed best. This model had one fewer cluster than the other model. However, there were fewer "-1" points which indicated no cluster. This model also gave us 3 clusters, which is similar to K-Means.<br>
+
+        Hierarchial Clustering: We can determine that agglomerative clustering model for hierarchial clustering was done properly given the hyper-parameter. We received an initial value of k=3, which was exactly like the best performing models of the other clusters. It is still important to note that we had 4 airlines in the original data, but were only given 3 clusters with this model.<br>
 
     <h2>Results:</h2>
-    <p> Text here:   <br>
+    <p> To begin, this results section will be changing prior to the end of the project, as I did not find the great results I had hoped for. However, I still made some good findings that will help build my project and answer my initial questions, as well as others.<br>
+
+    After performing K-Means, DBSCAN, and Hierarchial Clustering, I was able to determine that the best model was either K-Means or Hierarchial Clustering. Each model gave 3 clusters, which was still 1 less than I had hoped. However, after comparing the K-Means clusters to the actual data, it seems the clusters may not actually be too far off. Additionally, Hierarchial Clustering did a great job of having a similar number of points in each cluster to that of the actual number of points for each airline in the initial data. <br>
+
+    In terms of ease, I found that Hierarchial Clustering was the easiest to perform. It took very little time to complete, and the results seemed sufficient and in-line with the others. However, I would want to explore further hyper-parameter tuning in the future. <br>
+
+    On the same note, I believe my results could be a bit better if I include additional hyper-parameter tuning with the other models and explore more models. Another thing I want to do, is look at some different features, or even remove some features from my initial data that may not be relevant. One feature I think may be irrelevant is the DAY_OF_MONTH feature. I believe this feature may not be relevant because the number of cancelled flights wouldn't be expected to change based on which day of the month it is. In contrast, I would keep the DAY_OF_WEEK feature, as cancellations may be greater on the weekend in comparison to during the week, or vice-versa. <br>
+
+    The clustering results definitely provided some new insights into my data. For example, each optimal model only had 3 clusters, yet I was hoping to search for 4 different airlines. I could consider removing one of those airlines in the future. I would most likely choose the airline with the least points in the data, and see if the model performs better and still gives 3 clusters for the 3 remaining airlines.
 
     <h2>Conclusions:</h2>
-    <p> Text Here:  <br>
+    <p> After conducting various clustering methods on the data, I have a much better understanding for how each method works and how it should be applied. Each methods optimal model determined 3 clusters for the data. Initially, I wanted to explore if these models could accurately group the points into their specific airline. The initial data contains information for 4 different airlines, however, only 3 clusters were (optimally) found by each model. This means that the models may not be grouping flights based on their airline as accurately as I had hoped. I look forward to performing additional analysis and hyper-parameter tuning to create a better model. In terms of how these decisions can relate to real life, I want to give an example. For instance, an airline may want to see similarities in cancelled flights by other airlines based upon initial duration, distance, destination, airplane type, number of passengers, etc. They could run a clustering model and examine the clusers between cancelled and uncancelled flights, different destinations, competitor airlines, etc.<br>
 
   </p>
 </div>
