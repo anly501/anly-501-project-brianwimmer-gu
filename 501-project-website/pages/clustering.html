@@ -368,62 +368,87 @@ pre code {
 <div id="clustering" class="section level1">
 <h1>Clustering</h1>
 <div>
-    <h2>Methods:</h2>
-    <p>For conducting Decision Trees in Python, I wanted to look at flight cancellation data. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ&QO_fu146_anzr=b0-gvzr">BTS</a>. The purpose of this was to see if a decision tree model could predict flight cancellations during the first month that COVID-19 was declared a pandemic, which was March 2020. More specifically, we are going to explore flight cancellations departing from Washington Dulles Int'l. Airport (IAD), as well as only for the legacy carriers (United, Delta, and American). I chose to look specifically at this airport as it is closeby, and is one of the United States major airports. I also had to narrow down the data for loading purposes.<br>
+    <h2>Introduction:</h2>
+    <p>For conducting Clustering methods in Python, I wanted to look at flight cancellation data. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ&QO_fu146_anzr=b0-gvzr">BTS</a>. The feature data contains information regarding domestic flight cancellations for Washington-Dulles International Airport (IAD) and Reagan-Nation Airport (DCA) during April 2020, the following month that COVID-19 was declared a pandemic. April 2020 saw even higher flight cancellations than March 2020, at <a href="https://www.bts.gov/data-spotlight/april-operated-flights-hit-record-lows">nearly 41% of total flights cancelled.</a> I chose this month as it saw some of the highest percentages of cancelled flights, and could be compared to other months/years in a future analysis. The feature data contains all numerical data and each row represents a single flight that was cancelled at IAD during the month of April 2020. More about the feature data will be explained in the "Methods - Data Selection" section.<br> 
 
-    <p>First, the data set was split into X and Y. X denotes the entire dataset, minus the target variable. Y denotes only the target variable. For this decision tree, the target variable is identified as "CANCELLED" and is denoted with 0 being the flight was not cancelled, and 1 being the flight was cancelled. From there, we partition the data into testing and training sets for both X and Y. We then use a decision tree classifier to fit the model to the training data. From there, we make predictions based upon both the X training and test sets for the y-predictors. <br>
-
-    <p>After fitting the model, I made confusion matrices and ran random classifier models to record accuracy, recall, and precision values. I also built the decision tree itself. Both of these will be explored below. Following that, I explored the hyper-parameters to tune the model - which leads to a more accurate model and baseline. <br>
+    <p>In terms of the clustering analysis, I am trying to use unsupervised machine learning to determine the airline that cancelled the flight. Using K-Means, DBSCAN, and Hierarchial Clustering, I hope to accurately separate cancelled flights into their airline. This should allow me to see differences in cancelled flights based on the airline, destination, original schedule and statistics, and more.<br>
     
-    <h2>Class Distribution:</h2>
-    <p>For creating the class labels, I first had to make dummy variables for the carriers and destination ariport code. I then looked at the load balance and number of samples for cancelled and non-cancelled flights. I then split the data based on labeling: X denotes the entire dataset, minus the target variable, while Y denotes only the target variable. <br>
-        <img src="../images/DT_labels.png"><br>
-
-    <h2>Baseline Model for Comparison:</h2>
+    <h2>Theory:</h2>
     <p> <br>
-        Random Classifier on Train Data (Base Model):<br>
+    <p>K-Means: K-Means is an unsupervised clustering method used on un-labeled data. It uses vector quantization and its main goal is to group observations of the selected data into "clusters". Each cluster contains observations with specific and similar data. The cluster is centered around a "centroid", which is essentially the mean of the shared data observations of that cluster.<br>
+
+    <p>With K-Means clustering, we must select a value of k. This value determines the number of clusters to group and delegate our data into. We can also determine the value of k with various methods. One of these is the "elbow" method with uses the inertia and/or distortion of the data. We can then visualize the plot and determine a value of k based upon where the line "breaks", otherwise known as its elbow. We can also use the Silhouette Score. This method uses the mean intra-cluster distance and mean nearest-cluster distance. When examining the Silhouette Score for different values of k, a larger Silhouette Score would be preferred and you would want to select that value of k for the number of clusters.<br>
+
+    <p>DBSCAN: Also known as Density-Based Cluster Identification, DBSCAN is another unsupervised clustering method used on un-labeled data. It takes observations that are densely close together and groups them into clusters. With DBSCAN, the number of clusters does not have to be specified beforehand. Instead, we use two different parameters which will decide the number of clusters the model will fit.<br>
+
+    <p>Epsilon (denoted by "Eps") and MinPoints (denoted by min_samples) are what DBSCAN takes in as parameters. For choosing a value of eps, we can create a distance plot of the k-nearest neighbors. We decide how many neighbors each observation should have a calculate the distances. We can then examine the plot to see where the data "breaks" at which value of KNN distance, which will be our eps. For min_samples, we want to specify the minimum number of observations each cluster must have. This is highly dependent on domain knowledge, as well as the dataset. <br>
+    
+    <p>Hierarchial Clustering: Hierarchial Clustering is the third clustering method we will use, which is also unsupervised and used on un-labeled data. More specifically, we will use Agglomerative Clustering. With this method, each data observation is considered as its own cluster to begin with at the bottom of the hierarchy. We then move from the bottom-up, merging these clusters based on similar data. We will then be left with fewer clusters as we reach the top of the hierarchy. <br>
+
+    <p>To decide how many clusters we want to end with, we can first use linkage to create a dendrogram of the data. The dendrogram will visually show the number of clusters the data has been partitioned into. We also specify the method as "ward" and the metric as "euclidean". <br>
+
+    <h2>Methods - Data Selection:</h2>
+    <p> <br>
+        To begin the data selection process, I first wanted to look only at cancelled flights that originated at IAD or DCA airport (the two closest major airports to Georgetown University). I then selected only flights operated by the following airlines: United, Delta, American, and Southwest. These airlines made up the most domestic flights out of the two airports. I then had to create dummy variables for both the origin airport and the destination airports, in order to allow for clustering to work with just numeric data.<br>
+        <img src="../images/c_data_cleaning.png"><br>
+
+        Next, I examined the total number of data points for each of the four airlines. As we can see, United had the most cancelled flights at 610 flights (34% of the total cancelled flights). On the other hand, Delta had the least cancelled flights at 115 flights (6% of the total cancelled flights). It is important to note that this is not the percentage of their flights that were cancelled. Instead, it is the percentage of points each airline had in the dataset.<br>
+        <img src="../images/c_point_totals.png"><br>
+
+        I then converted the OP_CARRIER variable to be categorical codes. This will help later, as I can use the codes to compare to the clusters. This was not done for modeling purposes, as this data is considered a "target" and will not be used. <br>
+        <img src="../images/c_cat_codes.png"><br>
+
+        Finally, I split the dataset to be used for clustering. X will be used for clustering and does not contain the airline carrier. Y is just the airline carrier, which may be used for visualization and comparison purposes later on. I then normalized the data, which was optional. I did this as it may help visualize my results a bit better. <br>
+        <img src="../images/c_split.png"><br>
+
+    <h2>Methods - Hyper-Parameter Tuning - KMeans</h2>
+    <p> <br>
+        To begin K-Means clustering, I looped over 10 different values of k (clusters) from 1 to 10. I then fit the model for each value and recorded the inertia and distortion for each. <br>
+        <img src="../images/c_kmeans_model.png"><br>
+
+        I then plotted the inertia and distortion for each value of k. The elbow can be seen at a value of k=3. Thus, we can determine that the optimal value of k for the data is 3. Our data will be separated into 3 clusters. <br>
+        <img src="../images/c_kmeans_elbow_inertia.png"><br>
+        <img src="../images/c_kmeans_elbow_distortion.png"><br>
+
+        Next, I fit the model with the optimal value of k=3. I then predicted the clusters for the data and added the clusters to the original dataset. Finally, I plotted the predicted clusters to see how the data was separated. I also compared this to the actual airline carrier column. As we can see, there are 4 airline carriers in the actual data, except we used 3 with K-means. <br>
+        <img src="../images/c_kmeans_model_clusters.png"><br>
+        <img src="../images/c_kmeans_3clusters.png"><br>
+
+        I also wanted to see how the model would perform differently with other values of k. Pictured below is k=2. <br>
+        <img src="../images/c_kmeans_2clusters.png"><br>
+
+        As well as done with k=4. Initially, I assumed that by using elbow methods, an initial k value of 4 would be indicated. There are 4 airlines in the data, so I believed 4 clusters might be best. My assumption was incorrect, but I still wanted to run the model with it.<br>
+        <img src="../images/c_kmeans_4clusters.png"><br>
+
+        Finally, I wanted to confirm that 3 clusters was best when conducting K-Means. I ran the Silhouette Score for each value of k that I examined. As we can see, the Silhouette Score is highest at k=2. This is different from the k value given using elbow methods. <br>
+        <img src="../images/c_kmeans_silhouette.png"><br>
+
+    <h2>Methods - Hyper-Parameter Tuning - DBSCAN</h2>
+    <p> <br>
+        Data Selection: <br>
         <img src="../images/DT_random_classifier_train_base.png"><br>
-        Random Classifier on Test Data (Base Model):<br>
-        <img src="../images/DT_random_classifier_test_base.png"><br>
-        Random Classifier on Train Data (Tuned Model):<br>
-        <img src="../images/DT_random_classifier_train_hyper.png"><br>
-        Random Classifier on Test Data (Tuned Model):<br>
-        <img src="../images/DT_random_classifier_test_hyper.png"><br>
 
-    <h2>Feature Selection:</h2>
-    <p> For feature selection, I removed unimportant variables when created the dataset via the BTS website. Information such as the flight date, destination world area code, taxi time, etc. were irrelevant in buiding the decision tree. In a future model, I would look to explore different and various features. Had I tried to include everything the BTS website provides, the dataset would have too much information and not load, as well as resulting in a near impossible tree being built. In the Final Results section, we will see that this tree is already very hard to read.<br>
+    <h2>Methods - Hyper-Parameter Tuning - Hierarchial Clustering </h2>
+    <p> <br>
+        Data Selection: <br>
+        <img src="../images/DT_random_classifier_train_base.png"><br>
 
-    <h2>Model Tuning:</h2>
-    <p> After looping through the possible hyper-parameter values, I decided to tune the model for max_depth = num_layer. <br>
-        Hyper-Parameter Coding:<br>
-        <img src="../images/DT_hyper_loop.png"><br>
-        Hyper-Parameter and Accuracy:<br>
-        <img src="../images/DT_hyper_accuracy.png"><br>
-        Hyper-Parameter and Recall = 0:<br>
-        <img src="../images/DT_hyper_recall0.png"><br>
-        Hyper-Parameter and Recall = 1:<br>
-        <img src="../images/DT_hyper_recall1.png"><br>
+    <h2>Methods - Final Results:</h2>
+    <p> <br>
+        K-Means: <br>
+        <img src="../images/DT_random_classifier_train_base.png"><br>
 
-    <h2>Final Results:</h2>
-    <p>  <br>
-        Correlation Matrix of variables: We have a rather large correlation matrix, given that we have many variables after converting some to dummy values. The majority of the correlation matrix shown are the destinations. However we can see that the most highly correlated features are the elapsed flight time with distance and distance group. This is as expected, as longer flights often cover longer distances.<br>
-        <img src="../images/DT_corr_matrix.png"><br>
-        Confusion Matrix on Train Data (Base Model): The train data accurately predicted cancellations with around 84% accuracy in the base model. <br>
-        <img src="../images/DT_conf_matrix_train_base.png"><br>
-        Confusion Matrix on Test Data (Base Model): The test data accurately predicted cancellations with around 72% accuracy in the base model. We want to tune the model to increase this accuracy. <br>
-        <img src="../images/DT_conf_matrix_test_base.png"><br>
-        Confusion Matrix on Train Data (Tuned Model): The train data accurately predicted cancellations with around 83% accuracy in the hyper-parameter tuned model.<br>
-        <img src="../images/DT_conf_matrix_train_hyper.png"><br>
-        Confusion Matrix on Test Data (Tuned Model): The test data accurately predicted cancellations with around 73.5% accuracy in the hyper-parameter tuned model.<br>
-        <img src="../images/DT_conf_matrix_test_hyper.png"><br>
-        Decision Tree (Base Model): As we can see, the decision tree for the base model is massive, given the large number of features.<br>
-        <img src="../images/DT_tree_base.png"><br>
-        Decision Tree (Tuned Model): As we can see, the decision tree for the tuned model is massive, given the large number of features.<br>
-        <img src="../images/DT_tree_hyper.png"><br>
+        DBSCAN: <br>
+        <img src="../images/DT_random_classifier_train_base.png"><br>
 
-    <h2>Conclusion:</h2>
-    <p> We can learn many things through the decision tree model that I created. Overall, it predicted flight cancellations given the set of features with around 73.5% accuracy in the hyper-paramter tuned model. Around 3 in 4 flights are being accurately predicted on whether or not the flight was delayed. We can also note that the features seem to not have as much correlation as originally expected via the correlation matrix. <br>
-    <p> In the future, there are a multitude of things I would want to explore differently in a decision tree model for flight cancellations. To begin, I would like to have the capacity to explore a larger amount of data (ie. more rows). The dataset took a while for me to download, so mitigating this could lead to a better model in the future. I would also like to explore different features, and see if more highly correlated features can lead to a more accurate model. I would also like to work on tuning the model a bit better. After hyper-parameter searching and tuning, my model barely improved. I think what could've went wrong was not selecting the proper hyper-parameter. This model served as a good starting point for decision tree modeling of flights, but I want to improve it a lot more before the final project deadline. <br>
+        Hierarchial Clustering: <br>
+        <img src="../images/DT_random_classifier_train_base.png"><br>
+
+    <h2>Results:</h2>
+    <p> Text here:   <br>
+
+    <h2>Conclusions:</h2>
+    <p> Text Here:  <br>
 
   </p>
 </div>
