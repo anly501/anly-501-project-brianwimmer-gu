@@ -392,48 +392,58 @@ pre code {
         To begin the data selection process, I first wanted to look only at cancelled flights that originated at IAD or DCA airport (the two closest major airports to Georgetown University). I then selected only flights operated by the following airlines: United, Delta, American, and Southwest. These airlines made up the most domestic flights out of the two airports. I then had to create dummy variables for both the origin airport and the destination airports, in order to allow for clustering to work with just numeric data.<br>
         <p> <br>
         <img src="../images/c_data_cleaning.png"><br>
+        <p> <br>
 
         Next, I examined the total number of data points for each of the four airlines. As we can see, United had the most cancelled flights at 610 flights (34% of the total cancelled flights). On the other hand, Delta had the least cancelled flights at 115 flights (6% of the total cancelled flights). It is important to note that this is not the percentage of their flights that were cancelled. Instead, it is the percentage of points each airline had in the dataset.<br>
         <p> <br>
         <img src="../images/c_point_totals.png"><br>
+        <p> <br>
 
         I then converted the OP_CARRIER variable to be categorical codes. This will help later, as I can use the codes to compare to the clusters. This was not done for modeling purposes, as this data is considered a "target" and will not be used. <br>
         <p> <br>
         <img src="../images/c_cat_codes.png"><br>
+        <p> <br>
 
         Finally, I split the dataset to be used for clustering. X will be used for clustering and does not contain the airline carrier. Y is just the airline carrier, which may be used for visualization and comparison purposes later on. I then normalized the data, which was optional. I did this as it may help visualize my results a bit better. <br>
         <p> <br>
         <img src="../images/c_split.png"><br>
+        <p> <br>
 
     <h2>Methods - Hyper-Parameter Tuning - KMeans</h2>
     <p> <br>
         To begin K-Means clustering, I looped over 10 different values of k (clusters) from 1 to 10. I then fit the model for each value and recorded the inertia and distortion for each. <br>
         <p> <br>
         <img src="../images/c_kmeans_model.png"><br>
+        <p> <br>
 
         I then plotted the inertia and distortion for each value of k. The elbow can be seen at a value of k=3. Thus, we can determine that the optimal value of k for the data is 3. Our data will be separated into 3 clusters. <br>
         <p> <br>
         <img src="../images/c_kmeans_elbow_inertia.png"><br>
         <p> <br>
         <img src="../images/c_kmeans_elbow_distortion.png"><br>
+        <p> <br>
 
         Next, I fit the model with the optimal value of k=3. I then predicted the clusters for the data and added the clusters to the original dataset. Finally, I plotted the predicted clusters to see how the data was separated. I also compared this to the actual airline carrier column. As we can see, there are 4 airline carriers in the actual data, except we used 3 with K-means. <br>
         <p> <br>
         <img src="../images/c_kmeans_model_clusters.png"><br>
         <p> <br>
         <img src="../images/c_kmeans_3clusters.png"><br>
+        <p> <br>
 
         I also wanted to see how the model would perform differently with other values of k. Pictured below is k=2. <br>
         <p> <br>
         <img src="../images/c_kmeans_2clusters.png"><br>
+        <p> <br>
 
         As well as done with k=4. Initially, I assumed that by using elbow methods, an initial k value of 4 would be indicated. There are 4 airlines in the data, so I believed 4 clusters might be best. My assumption was incorrect, but I still wanted to run the model with it.<br>
         <p> <br>
         <img src="../images/c_kmeans_4clusters.png"><br>
+        <p> <br>
 
         Finally, I wanted to confirm that 3 clusters was best when conducting K-Means. I ran the Silhouette Score for each value of k that I examined. As we can see, the Silhouette Score is highest at k=2. This is different from the k value given using elbow methods. <br>
         <p> <br>
         <img src="../images/c_kmeans_silhouette.png"><br>
+        <p> <br>
 
     <h2>Methods - Hyper-Parameter Tuning - DBSCAN</h2>
     <p> <br>
@@ -442,52 +452,64 @@ pre code {
         <img src="../images/c_db_knn_code.png"><br>
         <p> <br>
         <img src="../images/c_db_knn_plot.png"><br>
+        <p> <br>
 
         Next, I decided on a minPts value of 20 for the min_sample parameter. I chose this based off of the number of flights for each airline. I also tested much larger minPts values, but the results only gave 2 cluster, or even gave 1 cluster of "-1". That value indicates that the data wasn't grouped into any cluster. I figured using and testing smaller minPts values would lead to a better model, which I proved to be a correct assumption.<br>
         <p> <br>
         <img src="../images/c_db_20pts_code.png"><br>
+        <p> <br>
 
         Also pictured below is a count of the number of points in each cluster. As we can see, there are 4 clusters, which an additional -1 cluster (for the non-clustered points). Additionally, the "0" cluster contained a huge number of data points - more points in a single cluster than any of the airlines could possibly have. The other clusters were disproportionally small. This may indicate that the model is not perfoming that well<br>
         <p> <br>
         <img src="../images/c_db_20pts_count.png"><br>
+        <p> <br>
 
         After fitting the model, I plotted the clusters. Again, we can see the "0" cluster in orange takes up a huge space in the data.
         <p> <br>
         <img src="../images/c_db_20pts_plot.png"><br>
+        <p> <br>
 
         I then attempted to lower the minPts value to 15. This affectively gave one fewer cluster than the previous model.
         <p> <br>
         <img src="../images/c_db_15pts_code.png"><br>
+        <p> <br>
 
         In contrast to a minPts value of 20, a minPts value of 15 only gave 3 clusters (and the -1 "non-cluster"). However, the count of the points in each cluster is still very disproportionate compared to the real data. <br>
         <p> <br>
         <img src="../images/c_db_15pts_count.png"><br>
+        <p> <br>
 
         Again, I plotted the clusters to find not much had changed.
         <p> <br>
         <img src="../images/c_db_15pts_plot.png"><br>
+        <p> <br>
 
     <h2>Methods - Hyper-Parameter Tuning - Hierarchial Clustering </h2>
     <p> <br>
         To begin Hierarchial Clustering, I generated the linkage values between each of the points. <br>
         <p> <br>
         <img src="../images/c_hc_dendrogram_code.png"><br>
+        <p> <br>
 
         I then visualized this linkage using a dendrogram in order to determine the value of k to use when fitting the model later. According to the dendrogram below, the optimal value of k is 3. <br>
         <p> <br>
         <img src="../images/c_hc_dendrogram.png"><br>
+        <p> <br>
 
         After determining a value of k=3, I fit the model using Agglomerative Clustering. For the linkage method, I indicated "ward". For the affinity metric, I indicated "euclidean". <br>
         <p> <br>
         <img src="../images/c_hc_model.png"><br>
+        <p> <br>
 
         Similarly to DBSCAN, I wanted to get a count of the number of points in each cluster. However, the count of points using this method was much similar to the real counts of points for each of the airlines, which may be a good sign that this model will perform better. We still only have 3 clusters, though, even though the data contains information for 4 airlines.  <br>
         <p> <br>
         <img src="../images/c_hc_counter.png"><br>
+        <p> <br>
 
         Finally, I plotted the clusters determined from using hierarchial clustering. Upon first look, this model seems to perform decently well. We will compare this to the actual data later. <br>
         <p> <br>
         <img src="../images/c_hc_plot.png"><br>
+        <p> <br>
 
     <h2>Methods - Final Results:</h2>
     <p> <br>
