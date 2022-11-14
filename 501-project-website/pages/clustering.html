@@ -378,11 +378,11 @@ pre code {
     <p>K-Means: K-Means is an unsupervised clustering method used on un-labeled data. It uses vector quantization and its main goal is to group observations of the selected data into "clusters". Each cluster contains observations with specific and similar data. The cluster is centered around a "centroid", which is essentially the mean of the shared data observations of that cluster.<br>
 
     <p>With K-Means clustering, we must select a value of k. This value determines the number of clusters to group and delegate our data into. We can also determine the value of k with various methods. One of these is the "elbow" method with uses the inertia and/or distortion of the data. We can then visualize the plot and determine a value of k based upon where the line "breaks", otherwise known as its elbow. We can also use the Silhouette Score. This method uses the mean intra-cluster distance and mean nearest-cluster distance. When examining the Silhouette Score for different values of k, a larger Silhouette Score would be preferred and you would want to select that value of k for the number of clusters.<br>
-
+    <p> <br>
     <p>DBSCAN: Also known as Density-Based Cluster Identification, DBSCAN is another unsupervised clustering method used on un-labeled data. It takes observations that are densely close together and groups them into clusters. With DBSCAN, the number of clusters does not have to be specified beforehand. Instead, we use two different parameters which will decide the number of clusters the model will fit.<br>
 
     <p>Epsilon (denoted by "Eps") and MinPoints (denoted by min_samples) are what DBSCAN takes in as parameters. For choosing a value of eps, we can create a distance plot of the k-nearest neighbors. We decide how many neighbors each observation should have a calculate the distances. We can then examine the plot to see where the data "breaks" at which value of KNN distance, which will be our eps. For min_samples, we want to specify the minimum number of observations each cluster must have. This is highly dependent on domain knowledge, as well as the dataset. <br>
-    
+    <p> <br>
     <p>Hierarchial Clustering: Hierarchial Clustering is the third clustering method we will use, which is also unsupervised and used on un-labeled data. More specifically, we will use Agglomerative Clustering. With this method, each data observation is considered as its own cluster to begin with at the bottom of the hierarchy. We then move from the bottom-up, merging these clusters based on similar data. We will then be left with fewer clusters as we reach the top of the hierarchy. <br>
 
     <p>To decide how many clusters we want to end with, we can first use linkage to create a dendrogram of the data. The dendrogram will visually show the number of clusters the data has been partitioned into. We also specify the method as "ward" and the metric as "euclidean". <br>
@@ -390,9 +390,11 @@ pre code {
     <h2>Methods - Data Selection:</h2>
     <p> <br>
         To begin the data selection process, I first wanted to look only at cancelled flights that originated at IAD or DCA airport (the two closest major airports to Georgetown University). I then selected only flights operated by the following airlines: United, Delta, American, and Southwest. These airlines made up the most domestic flights out of the two airports. I then had to create dummy variables for both the origin airport and the destination airports, in order to allow for clustering to work with just numeric data.<br>
+        <p> <br>
         <img src="../images/c_data_cleaning.png"><br>
 
         Next, I examined the total number of data points for each of the four airlines. As we can see, United had the most cancelled flights at 610 flights (34% of the total cancelled flights). On the other hand, Delta had the least cancelled flights at 115 flights (6% of the total cancelled flights). It is important to note that this is not the percentage of their flights that were cancelled. Instead, it is the percentage of points each airline had in the dataset.<br>
+        <p> <br>
         <img src="../images/c_point_totals.png"><br>
 
         I then converted the OP_CARRIER variable to be categorical codes. This will help later, as I can use the codes to compare to the clusters. This was not done for modeling purposes, as this data is considered a "target" and will not be used. <br>
