@@ -368,26 +368,50 @@ pre code {
 <div id="arm" class="section level1">
 <h1>ARM & Networking</h1>
 <div>
-    <h2>Methods:</h2>
-    <p>For conducting SVM in Python, I wanted to look at flight cancellation data. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ&QO_fu146_anzr=b0-gvzr">BTS</a>. The purpose of this was to see if a decision tree model could predict flight carriers during the first month that COVID-19 was declared a pandemic, which was March 2020. More specifically, we are going to explore flight carriers departing from Washington Dulles Int'l. Airport (IAD), as well as only for the legacy carriers (United, Delta, and American). I chose to look specifically at this airport as it is closeby, and is one of the United States major airports. I also had to narrow down the data for loading purposes.<br>
+    <h2>Introduction:</h2>
+    <p>For conducting ARM and Networking in Python, I wanted to look at flight cancellation data. The data I used was directly from the Transportation Security Administration and can be found here: <a href="https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ&QO_fu146_anzr=b0-gvzr">BTS</a>. The purpose of this was to see if an association rule mining model can determine any patterns within the cancellation data, or "rules" that determine if the flight was cancelled. More specifically, we are going to explore flight carriers departing from all three of the New York City Airports - Newark-Liberty International Airport (EWR), John-F-Kennedy International Airport (JFK), and LaGuardia Airport (LGA). In previous analysis in this project, I focused on Washington-DC area airports, so this time I wanted to explore a different travel hub for the US. In addition, I will only examine the legacy carriers (United, Delta, and American).<br>
+    <p> Furthermore, my feature data contains valuable information that may help in finding these sets of patterns/rules. Each row of data contains the airline, origin airport, destination airport, cancellation status (cancelled or completed), and distance (short, medium, or long-haul). I chose to narrow down my data to this feature data in order to focus on the locations aspect of flight cancellations. I also wanted to see how the airline carrier played a role, as well as how cancellations were determined by the distance of the flight.<br>
 
-    <p>First, the data set was split into X and Y. X denotes the entire dataset, minus the target variable. Y denotes only the target variable. For this decision tree, the target variable is identified as "OP_CARRIER" and is denoted with "AA" for American Airlines, "DL" for Delta Airlines, and "UA" for United Airlines. From there, we partition the data into testing and training sets for both X and Y. We then use a SVM classifier to fit the model to the training data. From there, we make predictions based upon both the X training and test sets for the y-predictors. <br>
+    <h2>Theory:</h2>
+    <p>Association Rule Mining is an aspect of data mining and machine learning that has become more and more prevalent it today's world. It is especially used in trascation data, but can be applied to other use-cases, jsut like I will explore here. ARM essentially looks for patterns in data, similar to an "if / then" statement. For example, in my case with flight cancellations, it can detect if a flight had the origin of a certain aiport, then it was cancelled. Similarly, it could detect if a flight was from the short-haul group and departed from a certain airport, then it landed at a certain other airport. Each part of the if/then acts as a set and the whole statement is a rule.
 
-    <p>After fitting the model, I made confusion matrices and ran random classifier models to record accuracy, recall, and precision values. Both of these will be explored below. <br>
-    
-    <h2>Class Distribution:</h2>
-    <p>For creating the class labels, I first had to make dummy variables for the origin and destination ariport code. I then split the data based on labeling: X denotes the entire dataset, minus the target variable, while Y denotes only the target variable of OP_CARRIER. <br>
-        <img src="../images/SVM_labels.png"><br>
-
-    <h2>Baseline Model for Comparison:</h2>
+    <p> From these given sets of rules, ARM then calculates specific statistics to determine the strength of that rule. These statistics are called support, confidence, and lift. 
     <p> <br>
-        Random Classifier on Train and Test Data:<br>
-        <img src="../images/SVM_class_report_df_both.png"><br>
+    <p> - Support: calculates how frequently a rule occurs in all transactions (on a scale from 0 to 1). For example, a rule states that a flight originated from JFK and was cancelled, and this occurred 5 times. There are 25 transactions total, so 5 out of 25 transactions would be a support of 0.2. A stronger support level closer to 1 would indicate the set is more important.
+    <p> <br>
+    <p> - Confidence: calculates the ratio of transactions that included the total rule, relative to the first set of that rule (on a scale from 0 to 1). For example, a rule states that a flight originated from JFK and had destination LAX, and that it was cancelled, and this occurred 5 times. There are 10 transactions total that included the JFK to LAX route. This would give us a confidence of 0.5. A stronger confidence level closer to 1 would indicate the rule is stronger.
+    <p> <br>
+    <p> - Lift: calculates the support of the rule relative to the support of the individual sets (on a scale from 0 to 1). For example, a rule states that a flight originated from JFK and had destination LAX, and that it was cancelled, and this occurred 5 times. There were 25 transactions in total, with 10 transactions that included the JFK to LAX route, and 15 transactions that included a cancelled flights. The support of the rule would be 0.2, and the support of the individual sets would be 0.4 and 0.6 respectively. This would give us a lift of 0.83. A lift equal to 1 means that the events are independent of each other. A lift less than 1 indicates a negative relationship and that both sets are unlikely to occur together. Alternatively, a lift greater than 1 indicates a positive relationship and that both sets are likely to occur together.
 
-    <h2>Feature Selection:</h2>
-    <p> For feature selection, I removed unimportant variables when created the dataset via the BTS website. Information such as the flight date, destination world area code, taxi time, etc. were irrelevant in buiding the decision tree. In a future model, I would look to explore different and various features. Had I tried to include everything the BTS website provides, the model might not perform as well.<br>
+    <h2>Methods:</h2>
+    <p>To apply the apriori algorithm for ARM in python, I looked to Professor James example code for help. As my dataset was not technically transaction data, I had to fix up a few things to begin. I started by cleaning up the data to make running ARM easier later on. I subsetted to include the three NYC area airports as the origin and filtered out to include the three legacy carriers. I then changed the cancellation column from binary to categorical, as well as replacing the distance groups. The distance group column initally contained values from 1-11, with each group specifying a specific flight distance. I did some research and converted this distances from miles to short, medium, and long-haul. I used this resource as a guide to convert them, it can be found here: <a href="https://en.wikipedia.org/wiki/Flight_length">Wikipedia</a>.<br>
+        <img src="../images/arm_cleaning.png"><br>
+        <img src="../images/arm_clean_head.png"><br>
+    
+    <p>After cleaning the data, I created a utility function to reformat the output of the results. This will display each set of rules, as well as the support, confidence, support x confidence, and lift values.<br>
+        <img src="../images/arm_reformat.png"><br>
 
-    <h2>Final Results:</h2>
+    <p>I created a second utility function to convert to a NetworkX object that will aid in plotting the network.<br>
+        <img src="../images/arm_convert.png"><br>
+
+    <p>Finally, I created a third utility function to plot the NetworkX object created above.<br>
+        <img src="../images/arm_plot.png"><br>
+
+    <p>Next, I cleaned the data even more to remove the header and index values. This will make it easier for reading in each row as a "transaction".<br>
+        <img src="../images/arm_index.png"><br>
+
+    <p>I then converted the data frame to a list of list. The full list contains lists of each "transaction".<br>
+        <img src="../images/arm_transactions.png"><br>
+        <img src="../images/arm_transactions_head.png"><br>
+
+    <p>Finally, I was able to run the apriori algorithm on the list of transactions to acquire the ARM sets of rules and statistics.<br>
+        <img src="../images/arm_run_apriori.png"><br>
+        <img src="../images/arm_results.png"><br>
+
+    <p>The apriori results were then plotted into a network graph for visualization purposes.<br>
+        <img src="../images/arm_network_plot.png"><br>
+
+    <h2>Results:</h2>
     <p>  <br>
         Confusion Matrix of variables: We can see from the confusion matrix that the model accurately predicted the carrier given the features around 97% of the time.<br>
         <img src="../images/SVM_conf_matrix_better.png"><br>
