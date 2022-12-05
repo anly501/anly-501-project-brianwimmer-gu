@@ -406,19 +406,19 @@ pre code {
 
     <p>Finally, I was able to run the apriori algorithm on the list of transactions to acquire the ARM sets of rules and statistics.<br>
         <img src="../images/arm_run_apriori.png"><br>
-        <img src="../images/arm_results.png"><br>
-
-    <p>The apriori results were then plotted into a network graph for visualization purposes.<br>
-        <img src="../images/arm_network_plot.png"><br>
 
     <h2>Results:</h2>
-    <p>  <br>
-        Confusion Matrix of variables: We can see from the confusion matrix that the model accurately predicted the carrier given the features around 97% of the time.<br>
-        <img src="../images/SVM_conf_matrix_better.png"><br>
+    <p>Below, we can see a few lines of the apriori results. I used a minimum support/confidence level of 0.1, so any set of rules above that threshold were computed. In the listed output, we can see the first set of rules: {AA} -> {Cancel}. This rule had a support of 0.24 and confidence of 0.64. This indicates that the set of rules is not that important, but that it is still a moderately strong rule. The lift value was 1.14, indicating that the sets are likely to occur together given the data.<br>
+        <img src="../images/arm_results.png"><br>
+
+    <p>We can also see apriori results plotted into a network graph for visualization purposes. The network displays how the sets are directed to each other. For example, flights originating from Newark (EWR) have many set relationships. Some of these include: United Airlines and medium haul (UA_Medium), Completed flight (non-cancellation), and Cancelled flight on United Airlines (Cancel_UA).<br>
+        <img src="../images/arm_network_plot.png"><br>
     
     <h2>Conclusion:</h2>
-    <p> We can learn many things through the SVM model that I created. Overall, it predicted flight carrier/airline given the set of features with around 97% accuracy in the rbf kernel model. <br>
-    <p> In the future, there are a multitude of things I would want to explore differently in a SVM model for flight carriers. To begin, I would like to have the capacity to explore a larger amount of data (ie. more rows), such as including more carriers, or using other airports. The dataset took a while for me to download, so mitigating this could lead to a better model in the future. I would also like to explore different features, and see if more highly correlated features can lead to a more accurate model. This model served as a good starting point for SVM modeling of flights, but I want to improve it a lot more before the final project deadline. <br>
+    <p> We can learn a multitude of things through the ARM model that I created. The apriori algorithm allows us to see patterns between the flights to determine the likehood of combinations of various feature variables. We can use these patterns to explain, for instance, a flight being cancelled given that it was scheduled to arrive at a certain airport.<br>
+    <p> Upon examining the apriori results further, I noted a few important findings. There was an overall low support value among the sets of rules created, with the maximum support being 0.29 for {Medium} -> {Cancel}. In comparison, I noticed a few rules had a confidence of 1, which indicated a very strong rule and the set always occured together. These rules included: {ORD} -> {Short} and {ATL} -> {Short}. This made sense to me, as all flights from any NYC airport to either Chicago or Atlanta would always be considered a short-haul flight because of the distance. I also found some sets of rules to have relatively high lift values greater than 1, indicating that they are highly likely to occur together. An example of this included {UA, Completed} -> {EWR}. This also made sense to me as Newark is a hub for United airlines, thus many of those transactions that included either of those would be highly likely to include the other. <br>
+    <br> I found this analysis to be extremely fun to do and insightful for my overall project. By looking through the apriori results, I can determine patterns within the flight data. I can also use it to focus on the rules that included a cancelled flight, in order to conclude which rules are most likely to cause a flight to be cancelled.
+
   </p>
 </div>
 
