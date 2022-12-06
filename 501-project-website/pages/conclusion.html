@@ -369,37 +369,68 @@ pre code {
 <h1>Conclusion</h1>
 <p>Nearly three years ago, the lives of every single human on the planet were changed forever. COVID-19 was an unprecedented disaster that the world wasn't nearly enough ready for. The first global pandemic in over a century, COVID-19 changed the way we would learn to live, work, and travel for the rest of our lives. Some industries took the brunt of the pandemic, including the airline industry. Airlines around the globe rushed to cancel flights, as government imposed travel and movement restrictions were put into place over night. Hundreds of thousands of flights were cancelled, and airports around the world saw record-low traffic numbers. Millions of people were forced to stay home, trying to keep themselves and their loved ones safe.</p>
 
-<p>As the COVID-19 pandemic has come to a slow "end" and we return back to our lives and travel, it important to remember the impact it had on the world. Airlines around the globe are still recovering, and tourism numbers are finally starting to increase. However, lasting effects may be felt for years to come. Through this project, I hoped to explore the data regarding passenger numbers and flight cancellations during COVID-19, to give some more context to the situation. My goal was to provide the reader with more information on factors affecting traffic numbers and flight cancellations, and how these factors can possibly predict them in the future.</p>
+<p>As the COVID-19 pandemic has come to a slow "end" and we return back to our lives and travel, it is important to remember the impact it had on the world. Airlines around the globe are still recovering, and tourism numbers are finally starting to increase. However, lasting effects may be felt for years to come. Through this project, I hoped to explore the data regarding passenger numbers and flight cancellations during COVID-19, to give some more context to the situation. My goal was to provide the reader with more information on factors affecting traffic numbers and flight cancellations, and how these factors can possibly predict them in the future.</p>
 
 <p>During Naive Bayes, I used data from the TSA regarding airport checkpoint numbers. Specifically, I wanted to explore how numbers had changed since before the pandemic in 2019, to now in 2022. The model predicted the days in which checkpoint numbers had recovered with nearly 96% accuracy. The analysis also showed that checkpoint numbers had not returned to pre-pandemic levels. As TSA only accounted for domestic flights, I ran a similar analysis on global data. I used data from the OAG regarding global passenger numbers and seat availability. It looked at numbers on a weekly basis and found that passenger numbers are making a recovery. The weeks in 2020 had a negative correlation with their respective weeks in 2019, 2021, and 2022, showing just how badly passenger numbers had decreased.</p>
 <img src="../images/py_NB_correlation.png"><br>
 <br>
+<br>
+<br>
 <p>For Decision Trees, I examined if a model could predict flight cancellations. For this model, I looked specifically at the nearby airport of Washington-Dulles (IAD) and on legacy carriers (United, American, and Delta). I also looked only at flights that were originally scheduled for March 2020, the month in which COVID-19 was declared a worldwide pandemic. The model used a variety of features, including day of the week, destination airport, distance, time, and others to predict cancellations. It accurately predicted flight cancellations with around 74% accuracy (3 in 4 flights). The correlation matrix created with the decision trees also helped to show any correlation between feature variables:</p>
 <img src="../images/DT_corr_matrix.png"><br>
+<br>
+<br>
 <br>
 <p>During Support Vector Machine (SVM), I examined if a model could predict the airline, given that the flight was cancelled (and other variables). For this model, I once again looked at flights originating from Washington-Dulles (IAD) and on legacy carriers (United, American, and Delta) during March 2020. This model turned out to be extremely accurate, correctly predicting the carrier 97% of the time. These results can be seen it the confusion matrix below:</p>
 <img src="../images/SVM_conf_matrix_better.png"><br>
 <br>
-<p>For Clustering, I looked at flights from both Washington DC area airports - Washington Dulles (IAD) and Reagan-National (DCA). I also included Southwest with the three legacy carriers. This time, I looked at flights cancelled during April 2020 after learning the April actually had more flight cancellations that March. I used K-Means, DBSCAN, and Hierarchial Clustering to categorize the flights and use their clusters to see if the airline could be pinpointed. Clustering also allowed me to see differences in cancellations and airlines based on destination, schedule, and other statistics. After conducting each model, I found K-Means clustering to be the most accurate. Although four carriers were represented and thus, hoping for four clusters to be formed, K-Means still only formed three clusters:</p>
+<br>
+<br>
+<p>For Clustering, I looked at flights from both Washington DC area airports - Washington Dulles (IAD) and Reagan-National (DCA). I also included Southwest with the three legacy carriers. This time, I looked at flights cancelled during April 2020 after learning that April actually had more flight cancellations than March. I used K-Means, DBSCAN, and Hierarchial Clustering to categorize the flights and use their clusters to see if the airline could be pinpointed. Clustering also allowed me to see differences in cancellations and airlines based on destination, schedule, and other statistics. After conducting each model, I found K-Means clustering to be the most accurate. Although four carriers were represented and thus, hoping for four clusters to be formed, K-Means still only formed three clusters:</p>
 <img src="../images/c_kmeans_3clusters.png"><br>
 <br>
-<p>Lastly, I used Association Rule Mining (ARM) and Networking to explore flight cancellation patterns and how sets of rules can determine a cancellation. After conducting the other models and analyses on flights from Washington DC, I wanted to complete ARM using flights from another US major travel hub - New York City. I used data from flights departing from each of the three NYC-area airports, John-F-Kennedy International (JFK), Newark-Liberty International (EWR), and LaGuardia (LGA). I also used fewer variables for this analysis to try to target specific relationships in the data, including: carrier, origin, destination, cancellation status, and distance group. After running an apiori algorithm and collecting statistics regarding support, confidence, and lift, I was able to view some patterns within the flight data. One example of this was discovering that 29% of flights classified as medium-haul were cancelled, while only 25% of flights classified as short-haul were cancelled. A summary of these statistics, as well as the network can be seen below:</p>
+<br>
+<br>
+<p>Lastly, I used Association Rule Mining (ARM) and Networking to explore flight cancellation patterns and how sets of rules can determine a cancellation. After conducting the other models and analyses on flights from Washington DC, I wanted to complete ARM using flights from another major US travel hub - New York City. I used data from flights departing from each of the three NYC-area airports, John-F-Kennedy International (JFK), Newark-Liberty International (EWR), and LaGuardia (LGA). I also used fewer variables for this analysis to try to target specific relationships in the data, including: carrier, origin, destination, cancellation status, and distance group. After running an apiori algorithm and collecting statistics regarding support, confidence, and lift, I was able to view some patterns within the flight data. One example of this was discovering that 29% of flights classified as medium-haul were cancelled, while only 25% of flights classified as short-haul were cancelled. A summary of these statistics, as well as the network can be seen below:</p>
 <img src="../images/arm_results.png"><br>
 <img src="../images/arm_network_plot.png"><br>
 <br>
+<br>
+<br>
+<p>Overall, this project was an essential learning experience for me and a great way to display some of the things I have learned in this class. My data analysis skills and statistical modeling knowledge improved throughout the past few months of this project. I learned a lot of valuable tools regarding the data science process and how it can be applied to real-world problems. I hope that this project can help others gain a better understanding of the impact COVID-19 has had on the airline industry and how it is still affecting it today and changing it for years to come. To fully conclude my project, I want to revisit my ten data science questions, quickly summarizing each.</p>
   
 <h2>Revisiting of Questions:</h2>
   <ol>
     <li>Overall, has air travel recovered to pre-pandemic levels?</li>
+    <p> - Domestically, TSA checkpoint numbers have been increasing since the initial slump of 2020, however they have not fully recovered. Globally, passenger and seat numbers are nearing pre-pandemic levels.</p>
+    <br>
     <li>Year over year, did TSA see the same amount of travelers as they did before the pandemic?</li>
+    <p> - TSA has not seen the same numbers as they did before the pandemic, and 2020 numbers have a negative correlation with 2021 and 2022 numbers. </p>
+    <br>
     <li>Are flight cancellations predictable?</li>
+    <p> - Flight cancellations are predictable. We can use a variety of variables, such as carrier, origin, destination, distance, etc. to predict flight cancellations during the pandemic.</p>
+    <br>
     <li>How accurate can a model predict flight cancellations?</li>
+    <p> - Accuracy depends on the model. Decision Trees predicted flight cancellations with 74% accuracy, while SVM predicted the airline that cancelled with 97% accuracy.  </p>
+    <br>
     <li>Is there a difference among airlines in determining if a flight should be cancelled?</li>
+    <p> - There is a difference. Certain factors such as origin and destination can determine cancellation during the pandemic. Certain markets are more important for specific airlines than others. </p>
+    <br>
     <li>Which month was hit harder by flight cancellations - March or April 2020?</li>
-    <li>Can we predict the airline based on various factors, such as origin airport, cancellation status, etc.</li>
+    <p> - April 2020 saw the most flight cancellations.</p>
+    <br>
+    <li>Can we predict the airline based on various factors, such as origin airport, cancellation status, etc.?</li>
+    <p> - We can predict the airline with 97% accuracy using SVM. On the other hand, we can predict with some accuracy, using clustering. Although clustering doesn't specify the airline, we can look within the cluster to compare variables and see which statistics match the airline.</p>
+    <br>
     <li>Are there any patterns in determining flight cancellations?</li>
+    <p> - There are many patterns determining flight cancellations. In ARM, for example, American Airlines flights originating from LGA were cancelled 70% of the time. </p>
+    <br>
     <li>Which airline saw the most cancellations, based on chosen airport?</li>
-    <li>Can we use modeling to determing passenger numbers and/or flight cancellations?</li>
+    <p> - An example of this can be seen among carriers flying from IAD and DCA. United saw the most cancellations during April 2020, with 610 flights being cancelled. </p>
+    <br>
+    <li>Can we use modeling to determine passenger numbers and/or flight cancellations?</li>
+    <p> - We can use modeling to determine changes in passenger numbers and to predict flight cancellations. This can be seen throughout my project. </p>
+    <br>
   </ol>
   </p>
 </div>
